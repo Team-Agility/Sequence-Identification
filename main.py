@@ -11,6 +11,7 @@ class Meeting:
     self.meeting_id = meeting_id
     self.meeting_dir = f'{DATASET_OUT_DIR}/{self.meeting_id}'
     self.transcript = []
+    print('\n')
 
   """
     Get Meeting Words
@@ -18,6 +19,7 @@ class Meeting:
     :return: Meeting words dict
   """
   def get_transcript(self):
+    print(f'{self.meeting_id}: Getting Transcript')
     if len(self.transcript) == 0:
       with open(f'{self.meeting_dir}/words_segmentation.json') as transcript_json:
         self.transcript = json.load(transcript_json)
@@ -29,6 +31,7 @@ class Meeting:
     :return: None
   """
   def preprocess(self):
+    print(f'{self.meeting_id}: Pre Processing...')
     for transcript in self.transcript:
       # replace consecutive unigrams with a single instance
       transcript['segment'] = re.sub('\\b(\\w+)\\s+\\1\\b', '\\1', transcript['segment'])
@@ -53,7 +56,12 @@ class Meeting:
   :return: Strring Array with Meeting IDs
 """
 def GetAllMeetingIDs():
-  return [os.path.basename(folder_path) for folder_path in glob.glob(f'{DATASET_OUT_DIR}/*')]
+  files = [os.path.basename(folder_path) for folder_path in glob.glob(f'{DATASET_OUT_DIR}/*')]
+  meetings = []
+  for file in files:
+    if '.' not in file and len(file) == 7:
+      meetings.append(file)
+  return meetings
 
 meeting_ids = GetAllMeetingIDs()
 for meeting_id in meeting_ids:
