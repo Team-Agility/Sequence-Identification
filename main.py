@@ -9,7 +9,7 @@ lemma = nltk.wordnet.WordNetLemmatizer()
 
 # Constants
 DATASET_OUT_DIR = 'dataset'
-N_GRAM_NO = 2 # BIGRAM
+N_GRAM_NO = 3 # BIGRAM
 
 class Meeting:
   def __init__(self, meeting_id):
@@ -108,8 +108,13 @@ class Meeting:
     for transcript in self.transcript:
       for idx, word in enumerate(transcript['segment']):
         if N_GRAM_NO >= 2 and idx >= 1:
-          self.keywordGraph.incrementEdgeWeight(transcript['segment'][idx-1], word, 1)
-    self.keywordGraph.printGraph()
+          self.keywordGraph.incrementEdgeWeight(transcript['segment'][idx-1], word, 1)        
+        if N_GRAM_NO >= 3 and idx >= 2:
+          self.keywordGraph.incrementEdgeWeight(transcript['segment'][idx-2], word, 0.3)
+
+    # self.keywordGraph.printGraph()
+    # print(self.keywordGraph.getNodes())
+    print(self.keywordGraph.getNodes(30))
 
 """
   Get All Dataset's Meeting IDs

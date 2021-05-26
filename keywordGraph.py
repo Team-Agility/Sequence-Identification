@@ -1,14 +1,19 @@
 from collections import defaultdict
+import heapq
+from operator import itemgetter
 
 class keywordGraph:
  
     # Constructor
     def __init__(self):
         self.graph = defaultdict(dict)
-        self.nodes = []
+        self.nodes = {}
  
     # add an edge to graph
-    def getNodes(self):
+    def getNodes(self, maxNodes = -1):
+        if maxNodes >= 1:
+            topTopics = heapq.nlargest(maxNodes, self.nodes.items(), key=itemgetter(1))
+            return dict(topTopics)
         return self.nodes
 
     # add an edge to graph
@@ -18,9 +23,13 @@ class keywordGraph:
     # add an edge to graph
     def addEdge(self, u, v, weight=1):
         if u not in self.nodes:
-            self.nodes.append(u)            
+            self.nodes[u] = weight
+        else:
+            self.nodes[u] += weight     
         if v not in self.nodes:
-            self.nodes.append(v)
+            self.nodes[v] = weight
+        else:
+            self.nodes[v] += weight
 
         self.graph[u][v] = weight
         self.graph[v][u] = weight
