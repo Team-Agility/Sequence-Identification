@@ -115,6 +115,9 @@ class Meeting:
     # self.keywordGraph.printGraph()
     # print(self.keywordGraph.getNodes())
     print(self.keywordGraph.getNodes(30))
+    self.keywordGraph.clusterSimiilarWords(30)
+    print(self.keywordGraph.getNodes(40))
+    print(self.keywordGraph.printGraph())
 
 """
   Get All Dataset's Meeting IDs
@@ -127,6 +130,7 @@ def GetAllMeetingIDs():
   for file in files:
     if '.' not in file and len(file) == 7:
       meetings.append(file)
+      break
   return meetings
 
 meeting_ids = GetAllMeetingIDs()

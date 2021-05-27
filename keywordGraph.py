@@ -1,6 +1,7 @@
 from collections import defaultdict
 import heapq
 from operator import itemgetter
+import wordsUtil
 
 class keywordGraph:
  
@@ -9,6 +10,8 @@ class keywordGraph:
         self.graph = defaultdict(dict)
         self.nodes = {}
         self.iterates = iterates
+        self.synonyms = {}
+        self.hypernym = {}
  
     # add an edge to graph
     def getNodes(self, maxNodes = -1):
@@ -32,14 +35,46 @@ class keywordGraph:
     def printGraph(self):
         print(dict(self.graph))
 
+    def findSynonym(self, word):
+        if word in self.graph:
+            return word, False
+
+        if word in self.synonyms:
+            return self.synonyms[word], True
+            
+        synonyms = wordsUtil.getSynonyms(word)
+        for synonym in synonyms:
+            if synonym in self.graph:
+                print('Synonym Matched', word, '=>', synonym)
+                self.synonyms[word] = synonym
+                return self.synonyms[word], True
+
+        return word, False
+
+    def findHypernym(self, word):
+        if word in self.graph:
+            return word, False
+
+        if word in self.hypernym:
+            return self.hypernym[word], True
+            
+        for node in self.graph:
+            if wordsUtil.isHypernym(word, node):
+                print('Hypernym Matched', word, '=>', node)
+                self.hypernym[word] = node
+                return self.hypernym[word], True
+
+        return word, False
+
     # add an edge to graph
     def addEdge(self, u, v, weight=1):
-        u = u.lower()
-        v = v.lower()
+        u, uSynonymFound = self.findSynonym(u.lower())
+        v, vSynonymFound = self.findSynonym(v.lower())
 
-        if u not in self.graph:
-            synonyms = wordnet.synsets(u)
-            print
+        # if not uSynonymFound:
+        #     u, uHypernymFound = self.findHypernym(u.lower())            
+        # if not vSynonymFound:
+        #     v, uHypernymFound = self.findHypernym(v.lower())
 
         self.graph[u][v] = weight
         self.graph[v][u] = weight
