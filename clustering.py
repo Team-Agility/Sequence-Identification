@@ -19,4 +19,13 @@ def cluster(transcript, filtered_transcript, topics, synonyms):
               clusters[topic].append(transcript[idx])
               topic_act_idx[topic].append(idx)
 
-  return clusters
+  timebased_clusters = []
+  for topic in clusters:
+    for act in clusters[topic]:
+      timebased_clusters.append({
+        'start_time': act['start_time'],
+        'end_time': act['end_time'],
+        'topic': topic
+      })
+
+  return sorted(timebased_clusters, key=lambda k: k['start_time'])

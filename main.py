@@ -157,7 +157,7 @@ class Meeting:
 
   def findSequences(self):
     self.clusters = clustering.cluster(self.transcript, self.filtered_transcript, self.topics, self.topicGraph.synonyms)
-    
+    print(self.clusters)
 
 """
   Get All Dataset's Meeting IDs
