@@ -19,5 +19,4 @@ def cluster(transcript, filtered_transcript, topics, synonyms):
               clusters[topic].append(transcript[idx])
               topic_act_idx[topic].append(idx)
 
-  print(clusters)
   return clusters

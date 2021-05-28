@@ -20,6 +20,8 @@ class Meeting:
     self.transcript = []
     self.load_transcript()
     self.topics = []
+    self.clusters = {}
+    self.word_count = {}
 
     self.topicGraph = topicGraph()
     print('\n')
@@ -100,6 +102,11 @@ class Meeting:
         if len(pos_filtered_segment) > 0:
           transcript['idx'] = idx
           fillered_transcript.append(transcript)
+          for word in transcript['segment']:
+            if word not in self.word_count:
+              self.word_count[word] = 1
+            else:
+              self.word_count[word] += 1
 
     self.filtered_transcript = fillered_transcript
   
@@ -122,11 +129,34 @@ class Meeting:
     # print(self.topicGraph.getNodes())
     print(self.topicGraph.getNodes(30))
     self.topicGraph.clusterSimiilarWords(30)
-    self.topics = list(self.topicGraph.getNodes(10).keys())
+    topics = list(self.topicGraph.getNodes(10).keys())
+    # print(topics)
+    self.topics = []
+    # print(self.word_count)
+    for topic in topics:
+      if topic not in self.word_count:
+        self.topics.append(topic)
+        print('skipped', topic)
+        continue
+      max_topic = topic
+      max_word_count = self.word_count[topic]
+      for synonym in self.topicGraph.synonyms:
+        if self.topicGraph.synonyms[synonym] == topic:
+          if synonym in self.word_count and max_word_count < self.word_count[synonym]:
+            max_topic = synonym
+            max_word_count = self.word_count[synonym]
+
+      if topic != max_topic:
+        self.topicGraph.synonyms[topic] = max_topic
+        for synonym in self.topicGraph.synonyms:
+          if self.topicGraph.synonyms[synonym] == topic:
+            self.topicGraph.synonyms[synonym] = max_topic
+
+      self.topics.append(max_topic)
     print(self.topics)
 
   def findSequences(self):
-    clustering.cluster(self.transcript, self.filtered_transcript, self.topics, self.topicGraph.synonyms)
+    self.clusters = clustering.cluster(self.transcript, self.filtered_transcript, self.topics, self.topicGraph.synonyms)
     
 
 """

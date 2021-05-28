@@ -3,7 +3,7 @@ import heapq
 from operator import itemgetter
 import wordsUtil
 
-class topicGraph:
+class topicGraph():
  
     # Constructor
     def __init__(self, iterates=5):
@@ -125,15 +125,19 @@ class topicGraph:
     def mergeNodes(self, u, v):
         print(f'Merging Nodes "{u}" & "{v}"')
 
-        if u not in self.graph[v] or v not in self.graph[u]:
-            return
+        # if u not in self.graph[v] or v not in self.graph[u]:
+        #     return
 
         # Find Word Order
-        if self.word_order[u][v] < self.word_order[v][u]:
+        topic1 = u.split(' ')[0]
+        topic2 = v.split(' ')[-1]
+        if topic2 in self.word_order[topic1] and self.word_order[topic1][topic2] < self.word_order[topic2][topic1]:
             u, v = v, u
 
-        del self.graph[u][v]
-        del self.graph[v][u]
+        if v in self.graph[u]:
+            del self.graph[u][v]
+        if u in self.graph[v]:
+            del self.graph[v][u]
 
         for edgeU in self.graph[u]:
             if edgeU in self.graph[v]:
