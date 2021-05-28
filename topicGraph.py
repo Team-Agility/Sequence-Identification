@@ -3,7 +3,7 @@ import heapq
 from operator import itemgetter
 import wordsUtil
 
-class keywordGraph:
+class topicGraph:
  
     # Constructor
     def __init__(self, iterates=5):

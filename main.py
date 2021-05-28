@@ -3,7 +3,7 @@ import os
 import json
 import re
 import nltk
-from keywordGraph import keywordGraph
+from topicGraph import topicGraph
 import clustering
 
 lemma = nltk.wordnet.WordNetLemmatizer()
@@ -21,7 +21,7 @@ class Meeting:
     self.load_transcript()
     self.topics = []
 
-    self.keywordGraph = keywordGraph()
+    self.topicGraph = topicGraph()
     print('\n')
 
   """
@@ -104,29 +104,29 @@ class Meeting:
     self.filtered_transcript = fillered_transcript
   
   """
-    Create Keyword Extraction Graph
+    Create Topic Extraction Graph
 
     :return: None
   """
   def createGraph(self):
-    print(f'{self.meeting_id}: Creating Keyword Extraction Graph...')
+    print(f'{self.meeting_id}: Creating Topic Extraction Graph...')
 
     for transcript in self.filtered_transcript:
       for idx, word in enumerate(transcript['segment']):
         if N_GRAM_NO >= 2 and idx >= 1:
-          self.keywordGraph.incrementEdgeWeight(transcript['segment'][idx-1], word, 1)        
+          self.topicGraph.incrementEdgeWeight(transcript['segment'][idx-1], word, 1)        
         if N_GRAM_NO >= 3 and idx >= 2:
-          self.keywordGraph.incrementEdgeWeight(transcript['segment'][idx-2], word, 0.3)
+          self.topicGraph.incrementEdgeWeight(transcript['segment'][idx-2], word, 0.3)
 
-    # self.keywordGraph.printGraph()
-    # print(self.keywordGraph.getNodes())
-    print(self.keywordGraph.getNodes(30))
-    self.keywordGraph.clusterSimiilarWords(30)
-    self.topics = list(self.keywordGraph.getNodes(10).keys())
+    # self.topicGraph.printGraph()
+    # print(self.topicGraph.getNodes())
+    print(self.topicGraph.getNodes(30))
+    self.topicGraph.clusterSimiilarWords(30)
+    self.topics = list(self.topicGraph.getNodes(10).keys())
     print(self.topics)
 
   def findSequences(self):
-    clustering.cluster(self.transcript, self.filtered_transcript, self.topics, self.keywordGraph.synonyms)
+    clustering.cluster(self.transcript, self.filtered_transcript, self.topics, self.topicGraph.synonyms)
     
 
 """
