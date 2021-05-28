@@ -116,8 +116,8 @@ class Meeting:
     # print(self.keywordGraph.getNodes())
     print(self.keywordGraph.getNodes(30))
     self.keywordGraph.clusterSimiilarWords(30)
-    print(self.keywordGraph.getNodes(40))
-    print(self.keywordGraph.printGraph())
+    topics = list(self.keywordGraph.getNodes(10).keys())
+    print(topics)
 
 """
   Get All Dataset's Meeting IDs

@@ -12,6 +12,7 @@ class keywordGraph:
         self.iterates = iterates
         self.synonyms = {}
         self.hypernym = {}
+        self.word_order = {}
  
     # add an edge to graph
     def getNodes(self, maxNodes = -1):
@@ -68,6 +69,18 @@ class keywordGraph:
 
     # add an edge to graph
     def addEdge(self, u, v, weight=1):
+        if u not in self.word_order:
+            self.word_order[u] = {}
+        if v not in self.word_order[u]:
+            self.word_order[u][v] = 1
+        else:
+            self.word_order[u][v] += 1
+
+        if v not in self.word_order:
+            self.word_order[v] = {}
+        if u not in self.word_order[v]:
+            self.word_order[v][u] = 0
+
         u, uSynonymFound = self.findSynonym(u.lower())
         v, vSynonymFound = self.findSynonym(v.lower())
 
@@ -111,8 +124,14 @@ class keywordGraph:
     # Merge 2 Nodes
     def mergeNodes(self, u, v):
         print(f'Merging Nodes "{u}" & "{v}"')
+
         if u not in self.graph[v] or v not in self.graph[u]:
             return
+            
+        # Find Word Order
+        if self.word_order[u][v] < self.word_order[v][u]:
+            u, v = v, u
+
         del self.graph[u][v]
         del self.graph[v][u]
 
