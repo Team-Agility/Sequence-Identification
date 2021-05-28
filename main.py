@@ -4,6 +4,7 @@ import json
 import re
 import nltk
 from keywordGraph import keywordGraph
+import clustering
 
 lemma = nltk.wordnet.WordNetLemmatizer()
 
@@ -15,8 +16,10 @@ class Meeting:
   def __init__(self, meeting_id):
     self.meeting_id = meeting_id
     self.meeting_dir = f'{DATASET_OUT_DIR}/{self.meeting_id}'
+    self.filtered_transcript = []
     self.transcript = []
     self.load_transcript()
+    self.topics = []
 
     self.keywordGraph = keywordGraph()
     print('\n')
@@ -26,7 +29,7 @@ class Meeting:
   """
   def load_transcript(self):
     with open(f'{self.meeting_dir}/words_segmentation.json') as transcript_json:
-      self.transcript = json.load(transcript_json)
+      self.filtered_transcript = json.load(transcript_json)
     
   """
     Get Meeting Transcript
@@ -35,7 +38,7 @@ class Meeting:
   """
   def get_transcript(self):
     print(f'{self.meeting_id}: Getting Transcript')
-    return self.transcript
+    return self.filtered_transcript
       
   """
     Preprocess Transacript
@@ -51,7 +54,9 @@ class Meeting:
         stopwords = [stopword.strip().lower() for stopword in set(f.read().splitlines())]
 
     fillered_transcript = []
-    for transcript in self.transcript:
+    for idx, transcript in enumerate(self.filtered_transcript):
+      self.transcript.append(transcript.copy())
+
       # Remove Punctuation Marks
       for punctuationMark in ['.', ',', '?']:
         transcript['segment'] = transcript['segment'].replace(punctuationMark, '')
@@ -93,9 +98,10 @@ class Meeting:
         
         transcript['segment'] = pos_filtered_segment
         if len(pos_filtered_segment) > 0:
+          transcript['idx'] = idx
           fillered_transcript.append(transcript)
 
-    self.transcript = fillered_transcript
+    self.filtered_transcript = fillered_transcript
   
   """
     Create Keyword Extraction Graph
@@ -105,7 +111,7 @@ class Meeting:
   def createGraph(self):
     print(f'{self.meeting_id}: Creating Keyword Extraction Graph...')
 
-    for transcript in self.transcript:
+    for transcript in self.filtered_transcript:
       for idx, word in enumerate(transcript['segment']):
         if N_GRAM_NO >= 2 and idx >= 1:
           self.keywordGraph.incrementEdgeWeight(transcript['segment'][idx-1], word, 1)        
@@ -116,8 +122,12 @@ class Meeting:
     # print(self.keywordGraph.getNodes())
     print(self.keywordGraph.getNodes(30))
     self.keywordGraph.clusterSimiilarWords(30)
-    topics = list(self.keywordGraph.getNodes(10).keys())
-    print(topics)
+    self.topics = list(self.keywordGraph.getNodes(10).keys())
+    print(self.topics)
+
+  def findSequences(self):
+    clustering.cluster(self.transcript, self.filtered_transcript, self.topics, self.keywordGraph.synonyms)
+    
 
 """
   Get All Dataset's Meeting IDs
@@ -138,6 +148,7 @@ for meeting_id in meeting_ids:
   meeting = Meeting(meeting_id)
   meeting.preprocess()
   meeting.createGraph()
+  meeting.findSequences()
   
       
 

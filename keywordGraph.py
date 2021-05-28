@@ -127,7 +127,7 @@ class keywordGraph:
 
         if u not in self.graph[v] or v not in self.graph[u]:
             return
-            
+
         # Find Word Order
         if self.word_order[u][v] < self.word_order[v][u]:
             u, v = v, u

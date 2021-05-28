@@ -15,3 +15,12 @@ def isHypernym(word1, word2):
     return False
   print(word1, word2, wordnet.wup_similarity(w1[0], w2[0]))
   return True if (len(w1[0].lowest_common_hypernyms(w2[0], use_min_depth=True)) > 0) else False
+
+
+def findSimillarity(word1, word2):
+  wordFromList1 = wordnet.synsets(word1)
+  wordFromList2 = wordnet.synsets(word2)
+  if wordFromList1 and wordFromList2: #Thanks to @alexis' note
+      s = wordFromList1[0].wup_similarity(wordFromList2[0])
+      return s
+  return 0
