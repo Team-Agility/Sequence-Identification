@@ -27,5 +27,33 @@ def cluster(transcript, filtered_transcript, topics, synonyms):
         'end_time': act['end_time'],
         'topic': topic
       })
+  timebased_clusters = sorted(timebased_clusters, key=lambda k: k['start_time'])
 
-  return sorted(timebased_clusters, key=lambda k: k['start_time'])
+  simplified_timebased_clusters = []
+  for idx, cluster in enumerate(timebased_clusters):
+    if idx == 0:
+      if cluster['topic'] == timebased_clusters[idx + 1]['topic']:
+        simplified_timebased_clusters.append(cluster)
+    elif idx == len(timebased_clusters) - 1:
+      if cluster['topic'] == simplified_timebased_clusters[-1]['topic']:
+        simplified_timebased_clusters.append(cluster)
+    elif cluster['topic'] == timebased_clusters[idx + 1]['topic'] or (len(simplified_timebased_clusters) > 0 and cluster['topic'] == simplified_timebased_clusters[-1]['topic']):
+        simplified_timebased_clusters.append(cluster)
+
+  # print(simplified_timebased_clusters)
+  final_clusters = []
+  prev_cluster = simplified_timebased_clusters[0]['topic']
+  start_time = 0.00
+  for idx, cluster in enumerate(simplified_timebased_clusters):
+    if len(simplified_timebased_clusters) - 1 == idx:
+       final_clusters.append((start_time, cluster['end_time']))
+    elif cluster['topic'] != prev_cluster:
+      final_clusters.append({
+        'start_time': start_time,
+        'end_time': cluster['start_time'],
+        'topic': prev_cluster
+      })
+      start_time = cluster['start_time']
+    prev_cluster = cluster['topic']
+
+  return final_clusters
