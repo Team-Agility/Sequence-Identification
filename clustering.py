@@ -46,12 +46,16 @@ def cluster(transcript, filtered_transcript, topics, synonyms):
   start_time = 0.00
   for idx, cluster in enumerate(simplified_timebased_clusters):
     if len(simplified_timebased_clusters) - 1 == idx:
-       final_clusters.append((start_time, cluster['end_time']))
+       final_clusters.append({
+        'start_time': start_time,
+        'end_time': cluster['end_time'],
+        'topic': ' '.join(prev_cluster.split(' ')[0:min(len(prev_cluster.split(' ')), 3)])
+      })
     elif cluster['topic'] != prev_cluster:
       final_clusters.append({
         'start_time': start_time,
         'end_time': cluster['start_time'],
-        'topic': prev_cluster
+        'topic': ' '.join(prev_cluster.split(' ')[0:min(len(prev_cluster.split(' ')), 3)])
       })
       start_time = cluster['start_time']
     prev_cluster = cluster['topic']
