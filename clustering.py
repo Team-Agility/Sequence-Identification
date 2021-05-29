@@ -1,5 +1,5 @@
 
-def cluster(transcript, filtered_transcript, topics, synonyms):
+def cluster(transcript, filtered_transcript, topics, synonyms, meeting_end_time):
   print('Clustering...')
   clusters = {}
   topic_act_idx = {}
@@ -24,7 +24,7 @@ def cluster(transcript, filtered_transcript, topics, synonyms):
     for act in clusters[topic]:
       timebased_clusters.append({
         'start_time': act['start_time'],
-        'end_time': act['end_time'],
+        'end_time': meeting_end_time,
         'topic': topic
       })
   timebased_clusters = sorted(timebased_clusters, key=lambda k: k['start_time'])
@@ -49,7 +49,7 @@ def cluster(transcript, filtered_transcript, topics, synonyms):
        final_clusters.append({
         'start_time': start_time,
         'end_time': cluster['end_time'],
-        'topic': ' '.join(prev_cluster.split(' ')[0:min(len(prev_cluster.split(' ')), 3)])
+        'topic':  'Conclusion' #' '.join(prev_cluster.split(' ')[0:min(len(prev_cluster.split(' ')), 3)])
       })
     elif cluster['topic'] != prev_cluster:
       final_clusters.append({

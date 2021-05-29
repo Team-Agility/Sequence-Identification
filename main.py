@@ -5,6 +5,7 @@ import re
 import nltk
 from topicGraph import topicGraph
 import clustering
+from pathlib import Path
 
 lemma = nltk.wordnet.WordNetLemmatizer()
 
@@ -22,6 +23,7 @@ class Meeting:
     self.topics = []
     self.clusters = {}
     self.word_count = {}
+    self.meeting_end_time = 0.00
 
     self.topicGraph = topicGraph()
     print('\n')
@@ -58,6 +60,7 @@ class Meeting:
     fillered_transcript = []
     for idx, transcript in enumerate(self.filtered_transcript):
       self.transcript.append(transcript.copy())
+      self.meeting_end_time = max(self.meeting_end_time, transcript['end_time'])
 
       # Remove Punctuation Marks
       for punctuationMark in ['.', ',', '?']:
@@ -109,6 +112,7 @@ class Meeting:
               self.word_count[word] += 1
 
     self.filtered_transcript = fillered_transcript
+    self.transcript = sorted(self.transcript, key=lambda k: k['start_time'])
   
   """
     Create Topic Extraction Graph
@@ -155,9 +159,25 @@ class Meeting:
       self.topics.append(max_topic)
     print(self.topics)
 
-  def findSequences(self):
-    self.clusters = clustering.cluster(self.transcript, self.filtered_transcript, self.topics, self.topicGraph.synonyms)
+  def findClusters(self):
+    self.clusters = clustering.cluster(self.transcript, self.filtered_transcript, self.topics, self.topicGraph.synonyms, self.meeting_end_time)
     print(self.clusters)
+
+  def findSequences(self):
+    sequences = {}
+    for cluster in self.clusters:
+      if cluster['topic'] not in sequences:
+        sequences[cluster['topic']] = []
+      cluster_start_time = cluster['start_time']
+      cluster_end_time = cluster['end_time']
+      for act in self.transcript:
+        if act['start_time'] >= cluster_start_time and act['end_time'] <= cluster_end_time:
+          sequences[cluster['topic']].append(act)
+
+    
+    Path(f'output/{self.meeting_id}').mkdir(parents=True, exist_ok=True)
+    with open(f'output/{self.meeting_id}/sequences.json', 'w', encoding='utf-8') as f:
+      json.dump(sequences, f, ensure_ascii=False, indent=4)
 
 """
   Get All Dataset's Meeting IDs
@@ -178,6 +198,7 @@ for meeting_id in meeting_ids:
   meeting = Meeting(meeting_id)
   meeting.preprocess()
   meeting.createGraph()
+  meeting.findClusters()
   meeting.findSequences()
   
       
