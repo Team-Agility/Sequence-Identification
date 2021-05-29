@@ -190,7 +190,6 @@ def GetAllMeetingIDs():
   for file in files:
     if '.' not in file and len(file) == 7:
       meetings.append(file)
-      break
   return meetings
 
 meeting_ids = GetAllMeetingIDs()
