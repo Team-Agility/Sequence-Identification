@@ -31,6 +31,22 @@
 
 ## Usage
   
-  ```
-  python main.py
-  ```
+1. Configure AWS CLI:
+
+    * [Intall AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv1.html)
+
+    ```
+    $ aws configure
+        AWS Access Key ID: ****************
+        AWS Secret Access Key: ****************
+        Default region name: ap-southeast-1
+        Default output format: json
+    ```
+
+2. Serve Locally:
+
+    ```
+    python serve.py
+    ```
+
+Serve at: [http://localhost:5000](http://localhost:5000)

@@ -24,6 +24,7 @@ class Meeting:
     self.clusters = {}
     self.word_count = {}
     self.meeting_end_time = 0.00
+    self.nxGraph = None
 
     self.topicGraph = topicGraph()
     print('\n')
@@ -157,13 +158,15 @@ class Meeting:
             self.topicGraph.synonyms[synonym] = max_topic
 
       self.topics.append(max_topic)
-    print(self.topics)
+    print('Topics', self.topics)
+    return self.topics, self.topicGraph.nxGraph
 
   def findClusters(self):
     self.clusters = clustering.cluster(self.transcript, self.filtered_transcript, self.topics, self.topicGraph.synonyms, self.meeting_end_time)
     # print(self.clusters)
 
   def findSequences(self):
+    print('finding sequence')
     sequences = {}
     for cluster in self.clusters:
       if cluster['topic'] not in sequences:
@@ -179,6 +182,14 @@ class Meeting:
     with open(f'output/{self.meeting_id}/sequences.json', 'w', encoding='utf-8') as f:
       json.dump(sequences, f, ensure_ascii=False, indent=4)
 
+    res = []
+    for topic in sequences.keys():
+      res.append({
+        'title': topic,
+        'acts': [act['segment'] for act in sequences[topic]]
+      })
+    return res
+
 """
   Get All Dataset's Meeting IDs
   
@@ -192,13 +203,13 @@ def GetAllMeetingIDs():
       meetings.append(file)
   return meetings
 
-meeting_ids = GetAllMeetingIDs()
-for meeting_id in meeting_ids:
-  meeting = Meeting(meeting_id)
-  meeting.preprocess()
-  meeting.createGraph()
-  meeting.findClusters()
-  meeting.findSequences()
+# meeting_ids = GetAllMeetingIDs()
+# for meeting_id in meeting_ids:
+#   meeting = Meeting(meeting_id)
+#   meeting.preprocess()
+#   meeting.createGraph()
+#   meeting.findClusters()
+#   meeting.findSequences()
   
       
 

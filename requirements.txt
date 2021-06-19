@@ -2,3 +2,8 @@ requests
 termcolor
 nltk
 numpy==1.19.5
+boto3
+flask
+flask-swagger
+matplotlib
+networkx

@@ -2,6 +2,7 @@ from collections import defaultdict
 import heapq
 from operator import itemgetter
 import wordsUtil
+import networkx as nx
 
 class topicGraph():
  
@@ -13,6 +14,7 @@ class topicGraph():
         self.synonyms = {}
         self.hypernym = {}
         self.word_order = {}
+        self.nxGraph = nx.Graph()
  
     # Get Nodes from graph
     def getNodes(self, maxNodes = -1):
@@ -91,6 +93,8 @@ class topicGraph():
 
         self.graph[u][v] = weight
         self.graph[v][u] = weight
+        self.nxGraph.add_edge(u, v, weight=weight)
+        # self.nxGraph.add_edge(v, u, weight=weight)
 
     # get weight of an edge
     def getEdgeWeight(self, u, v):
