@@ -10,6 +10,7 @@
 
     ```
     $ pip install -r requirements.txt
+    $ python config_nltk.py
     ```
 
 3. Download Dataset

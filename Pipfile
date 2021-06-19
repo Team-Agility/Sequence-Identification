@@ -8,8 +8,9 @@ requests = "*"
 termcolor = "*"
 nltk = "*"
 numpy = "==1.19.5"
+boto3 = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.7"
+python_version = "3.8"

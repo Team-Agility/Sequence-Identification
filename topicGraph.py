@@ -14,7 +14,7 @@ class topicGraph():
         self.hypernym = {}
         self.word_order = {}
  
-    # add an edge to graph
+    # Get Nodes from graph
     def getNodes(self, maxNodes = -1):
         self.nodes = {}
         nodes = self.graph.keys()
@@ -32,7 +32,7 @@ class topicGraph():
             return dict(topTopics)
         return self.nodes
 
-    # add an edge to graph
+    # Print Graph
     def printGraph(self):
         print(dict(self.graph))
 

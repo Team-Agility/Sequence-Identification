@@ -11,7 +11,7 @@ lemma = nltk.wordnet.WordNetLemmatizer()
 
 # Constants
 DATASET_OUT_DIR = 'dataset'
-N_GRAM_NO = 3 # BIGRAM
+N_GRAM_NO = 2 # BIGRAM
 
 class Meeting:
   def __init__(self, meeting_id):
@@ -161,7 +161,7 @@ class Meeting:
 
   def findClusters(self):
     self.clusters = clustering.cluster(self.transcript, self.filtered_transcript, self.topics, self.topicGraph.synonyms, self.meeting_end_time)
-    print(self.clusters)
+    # print(self.clusters)
 
   def findSequences(self):
     sequences = {}

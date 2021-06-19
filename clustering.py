@@ -35,14 +35,16 @@ def cluster(transcript, filtered_transcript, topics, synonyms, meeting_end_time)
       if cluster['topic'] == timebased_clusters[idx + 1]['topic']:
         simplified_timebased_clusters.append(cluster)
     elif idx == len(timebased_clusters) - 1:
-      if cluster['topic'] == simplified_timebased_clusters[-1]['topic']:
+      if len(simplified_timebased_clusters) > 0 and cluster['topic'] == simplified_timebased_clusters[-1]['topic']:
         simplified_timebased_clusters.append(cluster)
     elif cluster['topic'] == timebased_clusters[idx + 1]['topic'] or (len(simplified_timebased_clusters) > 0 and cluster['topic'] == simplified_timebased_clusters[-1]['topic']):
         simplified_timebased_clusters.append(cluster)
 
   # print(simplified_timebased_clusters)
   final_clusters = []
-  prev_cluster = simplified_timebased_clusters[0]['topic']
+  prev_cluster = None
+  if len(simplified_timebased_clusters) > 0:
+    prev_cluster = simplified_timebased_clusters[0]['topic']
   start_time = 0.00
   for idx, cluster in enumerate(simplified_timebased_clusters):
     if len(simplified_timebased_clusters) - 1 == idx:
