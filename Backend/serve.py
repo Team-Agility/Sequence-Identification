@@ -57,7 +57,7 @@ def createNewJob():
 
   startTraining(id, STEPS, data['transcript'], dataset_path)
 
-  return ResponseData(convertToObj(id, 1, STEPS, data['transcript']))
+  return ResponseData(convertToObj(id, 1, STEPS, StepsClass(data['transcript'])))
 
 @app.route("/spec")
 def spec():
