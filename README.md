@@ -9,6 +9,7 @@
 2. Install Required Python Packages:
 
     ```
+    $ cd Backend
     $ pip install -r requirements.txt
     $ python config_nltk.py
     ```
@@ -18,12 +19,14 @@
     Estimated Size: 1.94 GiB.
 
     ```
+    $ cd Backend
     $ python download_dataset.py
     ```
 
 4. Update Dataset
 
     ```
+    $ cd Backend
     $ python download_dataset.py
     ```
 
@@ -43,10 +46,21 @@
         Default output format: json
     ```
 
-2. Serve Locally:
+2. Serve Backend Locally:
 
     ```
-    python serve.py
+    $ cd Backend
+    $ python serve.py
     ```
 
-Serve at: [http://localhost:5000](http://localhost:5000)
+    Serve at: [http://localhost:5000](http://localhost:5000)
+
+2. Serve Frontend Locally:
+
+    ```
+    $ cd FrontEnd
+    $ npm install
+    $ npm start
+    ```
+
+    Serve at: [http://localhost:3000](http://localhost:3000)
