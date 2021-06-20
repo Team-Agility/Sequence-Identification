@@ -1,12 +1,23 @@
 from utils.thread import startTraining
 from utils.db import getAllMeetingIDs, getData
 from utils.requests import ClientError, ResponseData, Success, convertToObj
-from flask import Flask, request
+from flask import Flask, request, make_response
 from flask_swagger import swagger
 import uuid
 import json
 import os
 import decimal
+
+def _build_cors_prelight_response():
+    response = make_response()
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    response.headers.add('Access-Control-Allow-Headers', "*")
+    response.headers.add('Access-Control-Allow-Methods', "*")
+    return response
+
+def _corsify_actual_response(response):
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    return response
 
 class JSONEncoder(json.JSONEncoder):
     def default(self, obj):

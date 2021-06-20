@@ -1,4 +1,4 @@
-const base_url = ""
+const base_url = "http://localhost:5000/"
 
 export default {
   GetAllMembers: `https://api.github.com/repos/INTECS-ITFAC/intecs_webapp_front-end/contributors?q=contributions&order=desc`,

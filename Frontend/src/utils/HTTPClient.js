@@ -6,7 +6,7 @@ var instance = null;
 
 export const setAuth = () => {
   instance = axios.create({
-    baseURL: "",
+    baseURL: "http://localhost:5000",
     timeout: 120000,
 
     headers: {
