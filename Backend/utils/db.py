@@ -26,11 +26,18 @@ def get(pk, sk):
 def getAllMeetingIDs():
   response = table.query(
     KeyConditionExpression=Key('pk').eq('#SEQUENCE'),
-    ProjectionExpression="sk, updated_at"
+    ProjectionExpression="sk, updated_at, steps, completed_steps"
   )
 
   response['Items'].sort(key=lambda x: x['updated_at'], reverse=True)
-  return response['Items']
+  res = []
+  for job in response['Items']:
+    res.append({
+      'id': job['sk'],
+      'updated_at': job['updated_at'],
+      'status': 'Completed' if job['steps'] == job['completed_steps'] else 'Processing'
+    })
+  return res
 
 def getData(meeting_id):
   return get('#SEQUENCE', meeting_id)
