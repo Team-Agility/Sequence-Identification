@@ -3,52 +3,44 @@ import { handleActions } from "redux-actions";
 import { initialStateModel } from "../../../utils/Utilities";
 
 const initialState = {
-  allProjects: {
+  createJob: {
     ...initialStateModel,
   },
 
-  createProject: {
+  getAllMeetings: {
     ...initialStateModel,
   },
 
-  getProject: {
+  getMeetingsStatus: {
     ...initialStateModel,
-  },
-
-  updateProject: {
-    ...initialStateModel,
-  },
-
-  deleteProject: {
-    ...initialStateModel,
-  },
+  }
 };
 
 // Reducers from redux-actions
 export default handleActions(
   {
-    [types.GET_ALL_PROJECTS]: (state, { payload }) => ({
+    [types.CREATE_JOB]: (state, { payload }) => ({
       ...state,
-      allProjects: {
-        ...state.allProjects,
+      createJob: {
+        ...state.createJob,
         loading: true,
         pending: true,
       },
     }),
-    [types.GET_ALL_PROJECTS_SUCCESS]: (state, { payload }) => ({
+    [types.CREATE_JOB_SUCCESS]: (state, { payload }) => ({
       ...state,
-      allProjects: {
-        ...state.allProjects,
+      createJob: {
+        ...state.createJob,
         loading: false,
         pending: false,
         data: payload,
       },
     }),
 
-    [types.GET_ALL_PROJECTS_FAIL]: (state, { payload }) => ({
+    [types.CREATE_JOB_FAIL]: (state, { payload }) => ({
       ...state,
-      allProjects: {
-        ...state.allProjects,
+      createJob: {
+        ...state.createJob,
         loading: false,
         pending: false,
         hasError: true,
@@ -57,28 +49,28 @@ export default handleActions(
     }),
     // -------------------------------------
 
-    [types.CREATE_PROJECT]: (state, { payload }) => ({
+    [types.GET_ALL_MEETINGS]: (state, { payload }) => ({
       ...state,
-      createProject: {
-        ...state.createProject,
+      getAllMeetings: {
+        ...state.getAllMeetings,
         loading: true,
         pending: true,
       },
     }),
-    [types.CREATE_PROJECT_SUCCESS]: (state, { payload }) => ({
+    [types.GET_ALL_MEETINGS_SUCCESS]: (state, { payload }) => ({
       ...state,
-      createProject: {
-        ...state.createProject,
+      getAllMeetings: {
+        ...state.getAllMeetings,
         loading: false,
         pending: false,
         data: payload,
       },
     }),
 
-    [types.CREATE_PROJECT_FAIL]: (state, { payload }) => ({
+    [types.GET_ALL_MEETINGS_FAIL]: (state, { payload }) => ({
       ...state,
-      createProject: {
-        ...state.createProject,
+      getAllMeetings: {
+        ...state.getAllMeetings,
         loading: false,
         pending: false,
         hasError: true,
@@ -87,88 +79,28 @@ export default handleActions(
     }),
     // -------------------------------------
 
-    [types.GET_PROJECT]: (state, { payload }) => ({
+    [types.GET_MEETING_STATUS]: (state, { payload }) => ({
       ...state,
-      getProject: {
-        ...state.getProject,
+      getMeetingsStatus: {
+        ...state.getMeetingsStatus,
         loading: true,
         pending: true,
       },
     }),
-    [types.GET_PROJECT_SUCCESS]: (state, { payload }) => ({
+    [types.GET_MEETING_STATUS_SUCCESS]: (state, { payload }) => ({
       ...state,
-      getProject: {
-        ...state.getProject,
+      getMeetingsStatus: {
+        ...state.getMeetingsStatus,
         loading: false,
         pending: false,
         data: payload,
       },
     }),
 
-    [types.GET_PROJECT_FAIL]: (state, { payload }) => ({
+    [types.GET_MEETING_STATUS_FAIL]: (state, { payload }) => ({
       ...state,
-      getProject: {
-        ...state.getProject,
-        loading: false,
-        pending: false,
-        hasError: true,
-        error: { payload },
-      },
-    }),
-    // -------------------------------------
-
-    [types.UPDATE_PROJECT]: (state, { payload }) => ({
-      ...state,
-      updateProject: {
-        ...state.updateProject,
-        loading: true,
-        pending: true,
-      },
-    }),
-    [types.UPDATE_PROJECT_SUCCESS]: (state, { payload }) => ({
-      ...state,
-      updateProject: {
-        ...state.updateProject,
-        loading: false,
-        pending: false,
-        data: payload,
-      },
-    }),
-
-    [types.UPDATE_PROJECT_FAIL]: (state, { payload }) => ({
-      ...state,
-      updateProject: {
-        ...state.updateProject,
-        loading: false,
-        pending: false,
-        hasError: true,
-        error: { payload },
-      },
-    }),
-    // -------------------------------------
-
-    [types.DELETE_PROJECT]: (state, { payload }) => ({
-      ...state,
-      deleteProject: {
-        ...state.deleteProject,
-        loading: true,
-        pending: true,
-      },
-    }),
-    [types.DELETE_PROJECT_SUCCESS]: (state, { payload }) => ({
-      ...state,
-      deleteProject: {
-        ...state.deleteProject,
-        loading: false,
-        pending: false,
-        data: payload,
-      },
-    }),
-
-    [types.DELETE_PROJECT_FAIL]: (state, { payload }) => ({
-      ...state,
-      deleteProject: {
-        ...state.deleteProject,
+      getMeetingsStatus: {
+        ...state.getMeetingsStatus,
         loading: false,
         pending: false,
         hasError: true,
