@@ -9,7 +9,7 @@ export default function Transcript({data}) {
                 {data && data.map((content,i)=>{
                     return(
                         <React.Fragment>
-                            <p>content :  {content["content"]}</p>
+                            <p>content :  {content["segment"]}</p>
                             <p>end_time :  {content["end_time"]}</p>
                             <p>is_punction :  {content["is_punction"]? "True" : "False"}</p>
                             <p>speaker_id :  {content["speaker_id"]}</p>

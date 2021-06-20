@@ -9,6 +9,7 @@ import {
 import DashBoard from "./Components/Dashboard/Dashboard";
 import SiteLayout from "./Components/Layout/Layout";
 import { logout } from "./Services/UserLoginService";
+import { NotificationContainer } from "react-notifications";
 
 import { notification } from "antd";
 import Login from "./modules/auth/Login"
@@ -85,6 +86,7 @@ const Routes = () => {
         <PrivateRoute exact path="/" component={DashBoard} />
         <Route exact path="/" component={DashBoard} />
       </Switch>
+      <NotificationContainer enterTimeout={300} leaveTimeout={300} />
     </Router>
   );
 };

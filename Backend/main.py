@@ -10,7 +10,8 @@ from pathlib import Path
 lemma = nltk.wordnet.WordNetLemmatizer()
 
 # Constants
-DATASET_OUT_DIR = 'dataset'
+# DATASET_OUT_DIR = 'dataset'
+DATASET_OUT_DIR = "C:/Project/FYP/FYP/AMI-Corpus-JSON-Data-Manupulator/dataset"
 N_GRAM_NO = 2 # BIGRAM
 
 class Meeting:

@@ -26,44 +26,32 @@ class Process extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-        current:0,
+      current:0,
       currentCourseList: "",
       dataLoading: false,
       newTitle: "",
       newDescription: "",
       newLevel: "",
-      steps:[
-        {
-          title: 'input',
-          content: 'input',
-        },
-        {
-          title: 'First',
-          content: 'First-content',
-        },
-        {
-          title: 'Second',
-          content: 'Second-content',
-        },
-        {
-          title: 'Last',
-          content: 'Last-content',
-        },
-      ]
+      getMeetingsStatus:null,
+      steps:[]
     };
   }
 
+  componentDidMount(){
+    const { projectActions, match } = this.props
+    const id = match.params.id;
+    
+    projectActions.getMeetingStatus({id});
+  }
 
-  handleSubmit = (values) => {
-    const { productManagementActions } = this.props
-    const projectDto = {
-      jiraProjectName: values.jiraProjectName,
-      projectCode: values.projectCode,
-      projectName: values.projectName
+  componentDidUpdate(prevProps, prevState){
+    if(!this.props.getMeetingsStatus.loading && JSON.stringify(prevProps.getMeetingsStatus) != JSON.stringify(this.props.getMeetingsStatus)){
+
+      this.setState({
+        steps : this.props.getMeetingsStatus && this.props.getMeetingsStatus.data && this.props.getMeetingsStatus.data.data.steps
+      })
     }
-    console.log("Process ~ values", values)
-    productManagementActions.Process({projectDto})
-  };
+  }
 
   next = () => {
       this.setState({
@@ -79,71 +67,84 @@ class Process extends React.Component {
 
   render() {
     const { current, steps } = this.state
-    console.log("Process ~ render ~ this.props", this.props)
-    return (
-      <div>
-        <Card>
-          <PageHeader className="site-page-header" title="Process" />
+    const { getMeetingsStatus } = this.props
 
-          <React.Fragment>
-            <Steps current={current}>
-              {dummySteps.steps.map(step => (
-                <Step key={step.step} title={step.step} />
-              ))}
-            </Steps>
-            <div className="steps-action" style={{paddingTop: 10, paddingBottom:10}}>
-                {current < dummySteps.steps.length - 1 && (
-                <Button type="primary" onClick={() => this.next()}>
-                    Next
-                </Button>
-                )}
-                {current === dummySteps.steps.length - 1 && (
-                <Button type="primary" onClick={() => message.success('Processing complete!')}>
-                    Done
-                </Button>
-                )}
-                {current > 0 && (
-                <Button style={{ margin: '0 8px' }} onClick={() => this.prev()}>
-                    Previous
-                </Button>
-                )}
-            </div>
-            {/* <div className="steps-content">{steps[current].content}</div> */}
-            <div className="steps-content">
-            {
-              dummySteps.steps[current].type == "transcrpt" ? 
-                <Transcript data ={dummySteps.steps[current].data}/>
-                :
-                dummySteps.steps[current].type == "image" ? 
-                  <ImageHolder data ={dummySteps.steps[current].data}/>
-                :
-                dummySteps.steps[current].type == "string_list" ? 
-                <StringList data ={dummySteps.steps[current].data}/>
-                :
-                dummySteps.steps[current].type == "sequence" ? 
-                <Sequence data ={dummySteps.steps[current].data}/>
-                :
-                  null
-            }
-            </div>
-          </React.Fragment>
-          
-         </Card>
-       </div>
-    );
+    console.log("Process ~ render ~ this.props", this.props)
+    console.log("Process ~ render ~ this.state", this.state)
+
+    if(getMeetingsStatus.loading){
+      return(
+        <div>
+          Loading...
+        </div>
+      )
+
+    }else{
+      return (
+        <Spin spinning={getMeetingsStatus.pending}>
+          <Card>
+            <PageHeader className="site-page-header" title="Process" />
+  
+            <React.Fragment>
+              <Steps current={current}>
+                {steps.map(step => (
+                  <Step key={step.step} title={step.step} />
+                ))}
+              </Steps>
+              <div className="steps-action" style={{paddingTop: 10, paddingBottom:10}}>
+                  {current < steps.length - 1 && (
+                  <Button type="primary" onClick={() => this.next()}>
+                      Next
+                  </Button>
+                  )}
+                  {current === steps.length - 1 && (
+                  <Button type="primary" onClick={() => message.success('Processing complete!')}>
+                      Done
+                  </Button>
+                  )}
+                  {current > 0 && (
+                  <Button style={{ margin: '0 8px' }} onClick={() => this.prev()}>
+                      Previous
+                  </Button>
+                  )}
+              </div>
+              {/* <div className="steps-content">{steps[current].content}</div> */}
+              <div className="steps-content">
+              {
+                steps[current] && steps[current].type == "transcript" ? 
+                  <Transcript data ={steps[current].data}/>
+                  :
+                  steps[current] &&  steps[current].type == "image" ? 
+                    <ImageHolder data ={steps[current].data}/>
+                  :
+                  steps[current] &&  steps[current].type == "string_list" ? 
+                  <StringList data ={steps[current].data}/>
+                  :
+                  steps[current] &&  steps[current].type == "sequence" ? 
+                  <Sequence data ={steps[current].data}/>
+                  :
+                    null
+              }
+              </div>
+            </React.Fragment>
+            
+           </Card>
+         </Spin>
+      );
+    }
   }
 }
 
 
 const mapStateToProps = (state) => {
     return {
-      allState: state
+      getMeetingsStatus: state.Projects.getMeetingsStatus
     };
   };
   
   function mapDispatchToProps(dispatch) {
     return {
-      productManagementActions: bindActionCreators(projectActions,dispatch)
+      projectActions: bindActionCreators(projectActions,dispatch)
     };
   }
   

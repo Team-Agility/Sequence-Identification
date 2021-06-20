@@ -7,6 +7,7 @@ import App from './App';
 // import reportWebVitals from './reportWebVitals';
 import ConfigProvider from "./ConfigProvider";
 // import './index.css';
+import 'react-notifications/lib/notifications.css';
 import reducers from "./reducers";
 import services from "./services";
 

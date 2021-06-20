@@ -4,13 +4,16 @@ import actions from "./actions";
 import types from "./types";
 import endPoints from "../../../utils/EndPoints";
 import * as API from "../../../utils/HTTPClient";
+import { NotificationManager } from "react-notifications";
+import { reset } from "redux-form";
+import history from "../../../_helpers/history";
 
 const createJob = createLogic({
   type: types.CREATE_JOB,
   latest: true,
   debounce: 1000,
 
-  process({ MockHTTPClient }, dispatch, done) {
+  process({ MockHTTPClient, action }, dispatch, done) {
     let HTTPClient;
     if (MockHTTPClient) {
       HTTPClient = MockHTTPClient;
@@ -18,10 +21,17 @@ const createJob = createLogic({
       HTTPClient = API;
     }
     console.log("Running createJob Service");
-    HTTPClient.Get(endPoints.createJob)
+    HTTPClient.Post(endPoints.create_job, action.payload.createJobDto)
       .then((resp) => resp.data)
       .then((data) => {
         dispatch(actions.createJobSuccess(data));
+        NotificationManager.success("successfull created job", "Success");
+        dispatch(reset("Inputs"));
+        dispatch(actions.resetAllMeetings());
+        setTimeout(function(){ 
+          history.push("/output");
+        }, 3000);
+
       })
       .catch((err) => {
         console.log("createJob -> err", err);
@@ -29,6 +39,8 @@ const createJob = createLogic({
         if (err && err.code === "ECONNABORTED") {
           errorMessage = "Please check your internet connection.";
         }
+        NotificationManager.error("Fail created job", "Fail");
+
         dispatch(
           actions.createJobFail({
             title: "Error!",
@@ -45,7 +57,7 @@ const getAllMeetings = createLogic({
   latest: true,
   debounce: 1000,
 
-  process({ MockHTTPClient, action }, dispatch, done) {
+  process({ MockHTTPClient }, dispatch, done) {
     let HTTPClient;
     if (MockHTTPClient) {
       HTTPClient = MockHTTPClient;
@@ -54,9 +66,8 @@ const getAllMeetings = createLogic({
     }
 
     console.log("Running getAllMeetings Service");
-    console.log("paylaod : ", action.payload);
 
-    HTTPClient.Post(endPoints.project, action.payload.projectDto)
+    HTTPClient.Get(endPoints.get_all_meetings)
       .then((resp) => resp.data)
       .then((data) => {
         dispatch(actions.getAllMeetingsSuccess(data));
@@ -84,7 +95,7 @@ const getMeetingStatus = createLogic({
   latest: true,
   debounce: 1000,
 
-  process({ MockHTTPClient }, dispatch, done) {
+  process({ MockHTTPClient, action }, dispatch, done) {
     let HTTPClient;
     if (MockHTTPClient) {
       HTTPClient = MockHTTPClient;
@@ -92,7 +103,7 @@ const getMeetingStatus = createLogic({
       HTTPClient = API;
     }
     console.log("Running getMeetingStatus Service");
-    HTTPClient.Get(endPoints.GetAllProjects)
+    HTTPClient.Get(endPoints.get_meeting_status+`${action.payload.id}`)
       .then((resp) => resp.data)
       .then((data) => {
         dispatch(actions.getMeetingStatusSuccess(data));

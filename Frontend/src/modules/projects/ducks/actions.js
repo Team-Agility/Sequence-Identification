@@ -13,5 +13,8 @@ export default {
 
   getMeetingStatus: createAction(types.GET_MEETING_STATUS),
   getMeetingStatusSuccess: createAction(types.GET_MEETING_STATUS_SUCCESS),
-  getMeetingStatusFail: createAction(types.GET_MEETING_STATUS_FAIL)
+  getMeetingStatusFail: createAction(types.GET_MEETING_STATUS_FAIL),
+
+  resetAllMeetings: createAction(types.RESET_ALL_MEETINGS),
+
 };

@@ -1,9 +1,8 @@
 const base_url = "http://localhost:5000/"
 
 export default {
-  GetAllMembers: `https://api.github.com/repos/INTECS-ITFAC/intecs_webapp_front-end/contributors?q=contributions&order=desc`,
-  GetAllProjects: `https://api.github.com/repos/INTECS-ITFAC/intecs_webapp_back-end/contributors?q=contributions&order=desc`,
-  Get_all_events: `https://dev-dot-intecs-webapp.el.r.appspot.com/events`,
+  create_job: base_url,
+  get_all_meetings: base_url,
+  get_meeting_status: base_url
 
-  project: base_url + "project"
 };

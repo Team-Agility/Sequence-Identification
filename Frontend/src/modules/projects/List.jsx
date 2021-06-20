@@ -1,19 +1,10 @@
 import React from "react";
 import { withRouter } from "react-router";
-import { Field, reduxForm , getFormValues } from "redux-form";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-
-
+import moment from "moment";
 //STYLES
-import {
-  Card,
-  PageHeader,
-  Spin,
-  Table, 
-  Button, 
-  Space
-} from "antd";
+import { Card,PageHeader,Table, Button } from "antd";
 import { projectActions } from "./ducks";
 
 
@@ -53,19 +44,25 @@ class List extends React.Component {
   }
 
   componentDidMount() {
+    const { projectActions, getAllMeetings } = this.props
+
+    if(getAllMeetings.loading){
+      projectActions.getAllMeetings();
+    }
   }
 
   render() {
+    const { getAllMeetings } = this.props
     const columns = [
       {
         title: 'Date',
-        dataIndex: 'date',
+        dataIndex: 'updated_at',
         key: 'key',
-      },
-      {
-        title: 'Time',
-        dataIndex: 'time',
-        key: 'key',
+        render: (text, record) => (
+          <span>
+            {moment(record.updated_at).format("LLLL")}
+          </span>
+        ),
       },
       {
         title: 'Status',
@@ -77,7 +74,7 @@ class List extends React.Component {
         key: "action",
         render: (text, record) => (
           <span>
-            <Button type="primary" onClick={()=>this.props.history.push(`output/${record.key}`)}>View</Button>
+            <Button type="primary" onClick={()=>this.props.history.push(`output/${record.id}`)}>View</Button>
           </span>
         ),
       },
@@ -88,7 +85,13 @@ class List extends React.Component {
           <PageHeader className="site-page-header" title="All List" />
 
           <React.Fragment>
-            <Table columns={columns} dataSource={data} onChange={this.handleChange} loading={this.state.dataLoading} />
+            <Table 
+              columns={columns} 
+              // dataSource={data} 
+              dataSource={getAllMeetings.data && getAllMeetings.data.data} 
+              onChange={this.handleChange} 
+              loading={getAllMeetings.pending} 
+            />
           </React.Fragment>
         </Card>
       </div>
@@ -99,13 +102,13 @@ class List extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    fieldValues: getFormValues("createProject")(state)
+    getAllMeetings: state.Projects.getAllMeetings
   };
 };
 
 function mapDispatchToProps(dispatch) {
   return {
-    productManagementActions: bindActionCreators(projectActions,dispatch)
+    projectActions: bindActionCreators(projectActions,dispatch)
   };
 }
 

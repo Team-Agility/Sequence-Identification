@@ -19,6 +19,15 @@ const initialState = {
 // Reducers from redux-actions
 export default handleActions(
   {
+    
+    [types.RESET_ALL_MEETINGS]: (state, { payload }) => ({
+      ...state,
+      getAllMeetings: {
+        ...initialStateModel,
+      },
+    }),
+    // -------------------------------------
+
     [types.CREATE_JOB]: (state, { payload }) => ({
       ...state,
       createJob: {
