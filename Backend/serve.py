@@ -3,21 +3,22 @@ from utils.db import getAllMeetingIDs, getData
 from utils.requests import ClientError, ResponseData, Success, convertToObj
 from flask import Flask, request, make_response
 from flask_swagger import swagger
+from flask_cors import CORS, cross_origin
 import uuid
 import json
 import os
 import decimal
 
-def _build_cors_prelight_response():
-    response = make_response()
-    response.headers.add("Access-Control-Allow-Origin", "*")
-    response.headers.add('Access-Control-Allow-Headers', "*")
-    response.headers.add('Access-Control-Allow-Methods', "*")
-    return response
+# def _build_cors_prelight_response():
+#     response = make_response()
+#     response.headers.add("Access-Control-Allow-Origin", "*")
+#     response.headers.add('Access-Control-Allow-Headers', "*")
+#     response.headers.add('Access-Control-Allow-Methods', "*")
+#     return response
 
-def _corsify_actual_response(response):
-    response.headers.add("Access-Control-Allow-Origin", "*")
-    return response
+# def _corsify_actual_response(response):
+#     response.headers.add("Access-Control-Allow-Origin", "*")
+#     return response
 
 class JSONEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -27,6 +28,7 @@ DATASET_OUT_DIR = 'dataset'
 STEPS = ["Input", "Word Graph Generate", "Topic Extraction", "Sequence Identification", "Output"]
 
 app = Flask(__name__)
+CORS(app)
 app.json_encoder = JSONEncoder
 
 @app.route('/<id>', methods=['GET'])

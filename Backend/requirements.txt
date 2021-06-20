@@ -7,3 +7,4 @@ flask
 flask-swagger
 networkx
 matplotlib
+flask-cors
