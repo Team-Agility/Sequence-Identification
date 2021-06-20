@@ -54,11 +54,12 @@
     ```
 
     Serve at: [http://localhost:5000](http://localhost:5000)
+    API doc: [https://documenter.getpostman.com/view/5662193/TzeZE6Ty](https://documenter.getpostman.com/view/5662193/TzeZE6Ty)
 
 2. Serve Frontend Locally:
 
     ```
-    $ cd FrontEnd
+    $ cd Frontend
     $ npm install
     $ npm start
     ```

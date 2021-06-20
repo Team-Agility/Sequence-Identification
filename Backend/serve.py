@@ -1,4 +1,4 @@
-from utils.thread import startTraining
+from utils.thread import StepsClass, startTraining
 from utils.db import getAllMeetingIDs, getData
 from utils.requests import ClientError, ResponseData, Success, convertToObj
 from flask import Flask, request, make_response
@@ -57,7 +57,7 @@ def createNewJob():
 
   startTraining(id, STEPS, data['transcript'], dataset_path)
 
-  return Success('Success')
+  return ResponseData(convertToObj(id, 1, STEPS, StepsClass(data['transcript'])))
 
 @app.route("/spec")
 def spec():
