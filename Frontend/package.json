@@ -55,6 +55,7 @@
     ]
   },
   "devDependencies": {
-    "@formatjs/cli": "^4.2.8"
+    "@formatjs/cli": "^4.2.8",
+    "webpack": "^4.44.2"
   }
 }
