@@ -1,17 +1,23 @@
 import React from 'react'
 import { Card } from 'antd';
 
+export const filters = ['tail', 'favourite animal', 'home', 'point']
+
 export default function StringList({data}) {
-    console.log("StringList : ", data)
     return (
         <React.Fragment>
-            <Card title={`Topics`} style={{ width: 300 }}>
-                {data && data.map((content,i)=>{
+            <table title={`Topics`} style={{ width: 300, margin: 'auto' }}>
+                <tr>
+                    <th>Topics</th>
+                </tr>
+                {data && data.filter(c => filters.indexOf(c) < 0).map((content,i)=>{
                     return(
-                        <p>{content}</p>
+                        <tr>
+                            <td>{content}</td>
+                        </tr>
                     )
                 })}
-            </Card>
+            </table>
         </React.Fragment>
        
     )

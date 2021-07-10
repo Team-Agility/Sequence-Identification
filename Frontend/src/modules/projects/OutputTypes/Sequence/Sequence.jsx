@@ -1,13 +1,14 @@
 import React from 'react'
 import { Card } from 'antd';
 import Acts from "./Acts"
+import {filters} from './../String/StringList'
+
 export default function Sequence({data}) {
-    console.log("Sequence : ", data)
     return (
         <React.Fragment>
-            {data && data.map((seq,i)=>{
+            {data && data.filter(c => filters.indexOf(c.title) < 0).map((seq,i)=>{
                 return(
-                    <Card title={seq.title} >
+                    <Card title={seq.title}>
                         <Acts data={seq.acts}/>
                     </Card>
                 )

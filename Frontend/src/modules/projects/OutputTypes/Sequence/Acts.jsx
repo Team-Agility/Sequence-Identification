@@ -2,15 +2,17 @@ import React from 'react'
 
 function Acts({data}) {
     return (
-        <div>
+        <table>
             {
                 data && data.map((content,j)=>{
                     return(
-                        <p key={j}>{content}</p>
+                        <tr key={j}>
+                            <td>{content}</td>
+                        </tr>
                     )
                 })
             }
-        </div>
+        </table>
     )
 }
 
