@@ -51,6 +51,8 @@
 
     ```
     $ cd Backend
+    $ set FLASK_APP=main.py # Linux: export FLASK_APP=main.py 
+    $ set FLASK_ENV=development # Linux: export FLASK_ENV=development
     $ python serve.py
     ```
 
