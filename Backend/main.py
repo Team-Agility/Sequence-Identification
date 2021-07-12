@@ -165,6 +165,23 @@ class Meeting:
     self.clusters = clustering.cluster(self.transcript, self.filtered_transcript, self.topics, self.topicGraph.synonyms, self.meeting_end_time)
     # print(self.clusters)
 
+  # def getAccuracy(self):
+  #   TP = TN = FP = FN = 0
+  #   for i, idx in emularate(self.original_clusters):
+  #     if wordUtils.getSynonyms(self.clusters, i) > 0.75:
+  #       TP += 1
+  #     else:
+  #       TN += 1
+
+  #   for i, idx in emularate(self.clusters):
+  #     if wordUtils.getSynonyms(self.original_clusters, i) > 0.75:
+  #       FN += 1
+  #     else:
+  #       FP += 1
+
+  #   retunr TP, TN, FP, FN
+
+
   def findSequences(self):
     print('finding sequence')
     sequences = {}
@@ -211,6 +228,21 @@ def GetAllMeetingIDs():
 #   meeting.findClusters()
 #   meeting.findSequences()
   
-      
+# TP = TN = FP = FN = 0  
+# def accuracy():
+#   meetings = GetAllMeetingIDs()
+#   for meeting in meetings:
+#     meeting = Meeting(meeting)
+#     TP ,TN ,FP, FN = accumulate(meeting.getAccuracy())
+
+# recall = TP / (TP + FN)
+# precission = TP / (TP + FP)
+# print('recall ', recall)
+# print('precission ', precission)
+# print('F1_messure ', 2 * precission * recall / (precission + recall))
+
+  
+
+
 
 
